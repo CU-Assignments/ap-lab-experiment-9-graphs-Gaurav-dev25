@@ -1,25 +1,25 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-public:
-TreeNode* help(TreeNode* root, TreeNode* p, TreeNode* q){
-     if(root == NULL) return NULL;
-        if(root ==p || root == q) return root;
-        TreeNode* lef = lowestCommonAncestor(root->left,p,q);
-        TreeNode* rig = lowestCommonAncestor(root->right,p,q);
-       if(lef!=NULL && rig!=NULL) return root;
-       else if(lef!=NULL) return lef;
-        else if(rig!=NULL) return rig;
-        return NULL;
-}
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-       return help(root,p,q);
+bool iscycle(vector<int> adj[],vector<int> &vis,int id){
+        if(vis[id]==1)
+            return true;
+        if(vis[id]==0){
+            vis[id]=1;
+            for(auto edge : adj[id]){
+                if(iscycle(adj,vis,edge))
+                    return true;
+            }
+        }
+        vis[id] = 2;
+        return false;
     }
-};
+    bool canFinish(int n, vector<vector<int>>& pre) {
+        vector<int> adj[n];
+        for(auto edge : pre)
+            adj[edge[1]].push_back(edge[0]);
+        vector<int> vis(n,0);
+        
+        for(int i=0;i<n;i++){
+            if(iscycle(adj,vis,i))
+                return false;
+        }
+        return true;
+    }
