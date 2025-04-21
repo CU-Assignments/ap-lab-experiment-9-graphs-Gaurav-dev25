@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        int maxSum = INT_MIN;
+        maxGain(root, maxSum);
+        return maxSum;
+    }
+
+private:
+    int maxGain(TreeNode* node, int& maxSum) {
+        if (!node) return 0;
+
+        // Recursively get the maximum path sum of left and right subtrees
+        int leftGain = max(maxGain(node->left, maxSum), 0);
+        int rightGain = max(maxGain(node->right, maxSum), 0);
+
+        // Current path sum including both left and right child + node
+        int currentPath = node->val + leftGain + rightGain;
+
+        // Update global max if the current path sum is greater
+        maxSum = max(maxSum, currentPath);
+
+        // Return the max gain if continuing the same path (either left or right)
+        return node->val + max(leftGain, rightGain);
+    }
+};
